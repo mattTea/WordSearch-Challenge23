@@ -18,7 +18,7 @@ The first 14 elements represents the first row of the grid, the next 14 elements
 
 The words hidden in the word search may be arranged horizontally, vertically or diagonally and read in any direction.
 
-The list of locations can be found [here]() 
+The list of locations can be found [here](https://github.com/mattTea/WordSearch-Challenge23/blob/master/src/main/kotlin/words.kt) 
 
 
 ------

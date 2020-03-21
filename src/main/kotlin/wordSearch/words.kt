@@ -1,3 +1,5 @@
+package wordSearch
+
 val locations = listOf(
     "Abergavenny",
     "AbergavennyPetrolStation",
