@@ -1,7 +1,7 @@
 package wordSearch
 
 fun createWordSearch(words: List<String>): List<List<Char>> {
-    val letters = "ABCDEFGHIJKLMNOPQRSTUVWXTZ"
+    val letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
     fun createRow() = (1..14).map {
         letters.random()
@@ -10,10 +10,11 @@ fun createWordSearch(words: List<String>): List<List<Char>> {
     val grid = (1..14).map { createRow() }
 
     fun insertWords(grid: List<List<Char>>, words: List<String>): List<List<Char>> {
-        val randomRowNumbers = grid.indices.shuffled().take(words.size)
-        val wordsAndRowsToHideThemIn = randomRowNumbers.mapIndexed { index, rowNumber ->
-            Pair(rowNumber, words[index])
-        }
+        val wordsAndRowsToHideThemIn =
+            grid.indices
+                .shuffled()
+                .take(words.size)
+                .mapIndexed { index, rowNumber -> Pair(rowNumber, words[index]) }
 
         fun rangeInRowToBeReplaced(wordLength: Int): IntRange {
             val startInt = (0 until 14 - wordLength).random()
@@ -22,12 +23,13 @@ fun createWordSearch(words: List<String>): List<List<Char>> {
         }
 
         fun createNewRowWithHiddenWord(rowNumber: Int, word: String): List<Char> {
-            val row = grid[rowNumber]
-
-            return row.joinToString("").replaceRange(
-                range = rangeInRowToBeReplaced(word.length),
-                replacement = word
-            ).toList()
+            return grid[rowNumber]
+                .joinToString("")
+                .replaceRange(
+                    range = rangeInRowToBeReplaced(word.length),
+                    replacement = word
+                )
+                .toList()
         }
 
         return grid.mapIndexed { index, existingRow ->
@@ -38,7 +40,6 @@ fun createWordSearch(words: List<String>): List<List<Char>> {
                     existingRow
                 }
             }
-
         }
     }
 

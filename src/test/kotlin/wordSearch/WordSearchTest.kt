@@ -33,4 +33,15 @@ class WordSearchTest {
         assertThat(result).contains("FIRSTWORD")
         assertThat(result).contains("SECONDWORD")
     }
+
+    @Test
+    fun `should create grid with 3 horizontal location words included`() {
+        val grid = createWordSearch(listOf("FIRSTWORD", "SECONDWORD", "THIRDWORD"))
+
+        val result = grid.flatten().joinToString("")
+
+        assertThat(result).contains("FIRSTWORD")
+        assertThat(result).contains("SECONDWORD")
+        assertThat(result).contains("THIRDWORD")
+    }
 }
