@@ -73,4 +73,16 @@ class WordSearchTest {
         assertThat(grid.flatten().size).isEqualTo(196)
         assertThat(result).contains("VERTICALWORD")
     }
+
+    @Test
+    fun `should create grid with 2 vertical words included`() {
+        val grid = createWordSearch(listOf("FIRSTVERTICAL", "SECONDVERTICAL"), "vertical")
+
+        grid.map { println(it) }
+
+        val result = grid.transpose().flatten().joinToString("")
+
+        assertThat(result).contains("FIRSTVERTICAL")
+        assertThat(result).contains("SECONDVERTICAL")
+    }
 }

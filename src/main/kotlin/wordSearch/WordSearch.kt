@@ -26,7 +26,7 @@ fun createWordSearch(words: List<String>, plane: String = "row"): List<List<Char
                 .mapIndexed { index, rowNumber -> Pair(rowNumber, words[index]) }
 
         fun rangeInRowToBeReplaced(wordLength: Int): IntRange {
-            val startInt = (0 until 14 - wordLength).random()
+            val startInt = (0..14 - wordLength).random()
             val endInt = startInt + wordLength - 1
             return IntRange(startInt, endInt)
         }
