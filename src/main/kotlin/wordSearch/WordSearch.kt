@@ -1,6 +1,6 @@
 package wordSearch
 
-fun createWordSearch(words: List<String>, plane: String = "row"): List<List<Char>> {
+fun createWordSearch(words: List<String>): List<List<Char>> {
     val letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
     fun createRow() = (1..14).map {
@@ -10,17 +10,9 @@ fun createWordSearch(words: List<String>, plane: String = "row"): List<List<Char
     val grid = (1..14).map { createRow() }
 
     fun insertWords(grid: List<List<Char>>, words: List<String>): List<List<Char>> {
-        fun createStartingGrid(): List<List<Char>> {
-            return when (plane) {
-                "vertical" -> grid.transpose()
-                else -> grid
-            }
-        }
 
-        val startingGrid = createStartingGrid()
-
-        val wordsAndRowsToHideThemIn =
-            startingGrid.indices
+        val wordsAndRowIndexesToHideThemIn =
+            grid.indices
                 .shuffled()
                 .take(words.size)
                 .mapIndexed { index, rowNumber -> Pair(rowNumber, words[index]) }
@@ -32,7 +24,7 @@ fun createWordSearch(words: List<String>, plane: String = "row"): List<List<Char
         }
 
         fun createNewRowWithHiddenWord(rowNumber: Int, word: String): List<Char> {
-            return startingGrid[rowNumber]
+            return grid[rowNumber]
                 .joinToString("")
                 .replaceRange(
                     range = rangeInRowToBeReplaced(word.length),
@@ -41,17 +33,27 @@ fun createWordSearch(words: List<String>, plane: String = "row"): List<List<Char
                 .toList()
         }
 
-        val gridWithHiddenWords = startingGrid.mapIndexed { index, existingRow ->
-             if (wordsAndRowsToHideThemIn.any { it.first == index }) {
-                 createNewRowWithHiddenWord(index, wordsAndRowsToHideThemIn.single { it.first == index }.second)
-             } else {
-                 existingRow
-             }
+        val horizontalWordsAndRowIndexesToHideThemIn = wordsAndRowIndexesToHideThemIn
+            .take((wordsAndRowIndexesToHideThemIn.indices).random())
+
+        val gridWithHorizontalHiddenWords = grid.mapIndexed { index, existingRow ->
+            if (horizontalWordsAndRowIndexesToHideThemIn.any { it.first == index }) {
+                createNewRowWithHiddenWord(index, horizontalWordsAndRowIndexesToHideThemIn.single { it.first == index }.second)
+            } else {
+                existingRow
+            }
         }
 
-        return when (plane) {
-            "vertical" -> gridWithHiddenWords.transpose()
-            else -> gridWithHiddenWords
+        val verticalWordsAndRowIndexesToHideThemIn = wordsAndRowIndexesToHideThemIn - horizontalWordsAndRowIndexesToHideThemIn
+
+        val transposedGridWithHorizontalHiddenWords = gridWithHorizontalHiddenWords.transpose()
+
+        return transposedGridWithHorizontalHiddenWords.mapIndexed { index, existingRow ->
+            if (verticalWordsAndRowIndexesToHideThemIn.any { it.first == index }) {
+                createNewRowWithHiddenWord(index, verticalWordsAndRowIndexesToHideThemIn.single { it.first == index }.second)
+            } else {
+                existingRow
+            }
         }
     }
 

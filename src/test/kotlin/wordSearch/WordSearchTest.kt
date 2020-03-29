@@ -3,6 +3,7 @@ package wordSearch
 import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.isEqualTo
+import assertk.assertions.isTrue
 import org.junit.jupiter.api.Test
 
 class WordSearchTest {
@@ -18,71 +19,28 @@ class WordSearchTest {
     }
 
     @Test
-    fun `should create grid with a horizontal word included`() {
-        val grid = createWordSearch(listOf("TESTLOCATION"))
-
-        grid.map { println(it) }
-        val result = grid.flatten().joinToString("")
-
-        assertThat(grid.size).isEqualTo(14)
-        assertThat(grid[0].size).isEqualTo(14)
-        assertThat(grid.flatten().size).isEqualTo(196)
-        assertThat(result).contains("TESTLOCATION")
-    }
-
-    @Test
-    fun `should create grid with 2 horizontal words included`() {
+    fun `should create grid with 2 words included in either horizontal or vertical planes`() {
         val grid = createWordSearch(listOf("FIRSTWORD", "SECONDWORD"))
 
         grid.map { println(it) }
-        val result = grid.flatten().joinToString("")
+        val result = checkBothPlanes(grid, "FIRSTWORD", "SECONDWORD")
 
         assertThat(grid.size).isEqualTo(14)
         assertThat(grid[0].size).isEqualTo(14)
         assertThat(grid.flatten().size).isEqualTo(196)
-        assertThat(result).contains("FIRSTWORD")
-        assertThat(result).contains("SECONDWORD")
+        assertThat(result).isTrue()
     }
+}
 
-    @Test
-    fun `should create grid with 3 horizontal words included`() {
-        val grid = createWordSearch(listOf("FIRSTWORD", "SECONDWORD", "THIRDWORD"))
+private fun checkBothPlanes(grid: List<List<Char>>, word1: String, word2: String): Boolean {
+    val horizontalCheck = grid.flatten().joinToString("")
+    val verticalCheck = grid.transpose().flatten().joinToString("")
 
-        grid.map { println(it) }
-        val result = grid.flatten().joinToString("")
-
-        assertThat(grid.size).isEqualTo(14)
-        assertThat(grid[0].size).isEqualTo(14)
-        assertThat(grid.flatten().size).isEqualTo(196)
-        assertThat(result).contains("FIRSTWORD")
-        assertThat(result).contains("SECONDWORD")
-        assertThat(result).contains("THIRDWORD")
-    }
-
-    @Test
-    fun `should create grid with a vertical word included`() {
-        val grid = createWordSearch(listOf("VERTICALWORD"), "vertical")
-
-        grid.map { println(it) }
-
-        //transposing again below so we can read word horizontally in test
-        val result = grid.transpose().flatten().joinToString("")
-
-        assertThat(grid.size).isEqualTo(14)
-        assertThat(grid[0].size).isEqualTo(14)
-        assertThat(grid.flatten().size).isEqualTo(196)
-        assertThat(result).contains("VERTICALWORD")
-    }
-
-    @Test
-    fun `should create grid with 2 vertical words included`() {
-        val grid = createWordSearch(listOf("FIRSTVERTICAL", "SECONDVERTICAL"), "vertical")
-
-        grid.map { println(it) }
-
-        val result = grid.transpose().flatten().joinToString("")
-
-        assertThat(result).contains("FIRSTVERTICAL")
-        assertThat(result).contains("SECONDVERTICAL")
+    return when {
+        horizontalCheck.contains(word1) && horizontalCheck.contains(word2) -> true
+        verticalCheck.contains(word1) && verticalCheck.contains(word2) -> true
+        horizontalCheck.contains(word1) && verticalCheck.contains(word2) -> true
+        horizontalCheck.contains(word2) && verticalCheck.contains(word1) -> true
+        else -> false
     }
 }
