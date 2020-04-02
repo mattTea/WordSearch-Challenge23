@@ -1,10 +1,11 @@
 package wordSearch
 
-fun createWordSearch(words: List<String>): List<List<Char>> {
+fun createWordSearch(words: List<String>, wordsToHide: Int): List<List<Char>> {
     val letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
     fun createRow() = (1..14).map {
-        letters.random()
+//        letters.random()
+        '-'
     }
 
     val grid = (1..14).map { createRow() }
@@ -38,6 +39,8 @@ fun createWordSearch(words: List<String>): List<List<Char>> {
 
         val gridWithHorizontalHiddenWords = grid.mapIndexed { index, existingRow ->
             if (horizontalWordsAndRowIndexesToHideThemIn.any { it.first == index }) {
+                // check here whether any letters exist in the range to be replaced - how?
+                // maybe within createNewRowWithHiddenWord()
                 createNewRowWithHiddenWord(index, horizontalWordsAndRowIndexesToHideThemIn.single { it.first == index }.second)
             } else {
                 existingRow
@@ -61,7 +64,7 @@ fun createWordSearch(words: List<String>): List<List<Char>> {
 }
 
 fun main() {
-    createWordSearch(listOf("A", "B", "C", "D", "E", "F", "A", "B", "C", "D", "E", "F")).map { println(it) }
+    createWordSearch(listOf("A", "B", "C", "D", "E", "F", "A", "B", "C", "D", "E", "F"), 5).map { println(it) }
     println()
 }
 

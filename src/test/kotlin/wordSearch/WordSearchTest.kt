@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class WordSearchTest {
     @Test
     fun `should create 14x14 character grid`() {
-        val grid = createWordSearch(listOf(""))
+        val grid = createWordSearch(listOf(""), 0)
 
         grid.map { println(it) }
 
@@ -20,7 +20,7 @@ class WordSearchTest {
 
     @Test
     fun `should create grid with 2 words included in either horizontal or vertical planes`() {
-        val grid = createWordSearch(listOf("FIRSTWORD", "SECONDWORD"))
+        val grid = createWordSearch(listOf("FIRSTWORD", "SECONDWORD"), 2)
 
         grid.map { println(it) }
         val result = checkBothPlanes(grid, "FIRSTWORD", "SECONDWORD")
@@ -29,6 +29,18 @@ class WordSearchTest {
         assertThat(grid[0].size).isEqualTo(14)
         assertThat(grid.flatten().size).isEqualTo(196)
         assertThat(result).isTrue()
+    }
+
+    @Test
+    fun `should hide a horizontal word in grid`() {
+        val grid = createWordSearchGrid("TESTWORD")
+
+        grid.map { println(it) }
+
+        assertThat(grid.size).isEqualTo(14)
+        assertThat(grid[0].size).isEqualTo(14)
+        assertThat(grid.flatten().size).isEqualTo(196)
+        assertThat(grid.flatten().joinToString("")).contains("TESTWORD")
     }
 }
 
