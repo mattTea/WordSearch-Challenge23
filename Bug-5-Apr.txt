@@ -1,0 +1,18 @@
+[-, -, A, -, -, -, -, A, -, -, -, -, -, -]
+[-, -, L, -, -, -, -, B, -, -, -, -, -, A]
+[-, A, L, -, -, -, A, I, -, -, -, -, -, L]
+[-, D, I, -, -, -, L, N, -, A, -, -, -, C]
+[-, D, N, -, -, -, D, G, A, B, -, -, -, E]
+[-, L, G, -, -, -, E, D, L, E, -, A, -, S]
+[-, E, T, -, -, -, R, O, T, R, -, M, -, T]
+[A, S, O, -, -, -, L, N, R, G, -, E, -, E]
+[L, T, N, -, -, -, E, -, I, A, -, R, -, R]
+[T, O, P, -, -, -, Y, -, N, V, -, S, -, -]
+[-, -, B, R, A, C, K, L, E, Y, -, -, -, -]
+[N, E, R, -, -, -, D, -, H, N, -, A, -, -]
+[-, -, K, -, -, -, G, -, A, N, -, M, -, -]
+[-, -, -, -, -, -, E, -, M, Y, -, -, -, -]
+
+
+1. Words not being randomised
+2. The entire row containing 'Brackley' replaces what was already there, ignoring all the letters already there

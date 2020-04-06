@@ -2,6 +2,7 @@ package wordSearch
 
 import assertk.assertThat
 import assertk.assertions.contains
+import assertk.assertions.containsExactly
 import assertk.assertions.isEqualTo
 import assertk.assertions.isTrue
 import org.junit.jupiter.api.Test
@@ -18,21 +19,21 @@ class WordSearchTest {
         assertThat(grid.flatten().size).isEqualTo(196)
     }
 
+//    @Test
+//    fun `should create grid with 2 words included in either horizontal or vertical planes`() {
+//        val grid = createWordSearch(listOf("FIRSTWORD", "SECONDWORD"), 2)
+//
+//        grid.map { println(it) }
+//        val result = checkBothPlanes(grid, "FIRSTWORD", "SECONDWORD")
+//
+//        assertThat(grid.size).isEqualTo(14)
+//        assertThat(grid[0].size).isEqualTo(14)
+//        assertThat(grid.flatten().size).isEqualTo(196)
+//        assertThat(result).isTrue()
+//    }
+
     @Test
-    fun `should create grid with 2 words included in either horizontal or vertical planes`() {
-        val grid = createWordSearch(listOf("FIRSTWORD", "SECONDWORD"), 2)
-
-        grid.map { println(it) }
-        val result = checkBothPlanes(grid, "FIRSTWORD", "SECONDWORD")
-
-        assertThat(grid.size).isEqualTo(14)
-        assertThat(grid[0].size).isEqualTo(14)
-        assertThat(grid.flatten().size).isEqualTo(196)
-        assertThat(result).isTrue()
-    }
-
-    @Test
-    fun `should hide a horizontal word in grid`() {
+    fun `SECOND ATTEMPT should hide a horizontal word in grid`() {
         val grid = createWordSearchGrid("TESTWORD")
 
         grid.map { println(it) }
@@ -41,6 +42,43 @@ class WordSearchTest {
         assertThat(grid[0].size).isEqualTo(14)
         assertThat(grid.flatten().size).isEqualTo(196)
         assertThat(grid.flatten().joinToString("")).contains("TESTWORD")
+    }
+
+    @Test
+    fun `should return position and value of existing character in row`() {
+        val grid = listOf(
+            listOf('-', '-', 'O'),
+            listOf('-', '-', 'N'),
+            listOf('-', '-', 'E')
+        )
+
+        val result = lettersInPlace(grid, 1)
+        assertThat(result).isEqualTo(listOf(Pair(2, 'N')))
+    }
+
+    @Test
+    fun `should return position and value of 2 existing characters in row`() {
+        val grid = listOf(
+            listOf('-', 'T', '-', '-'),
+            listOf('-', 'W', '-', 'O'),
+            listOf('-', 'O', '-', 'N'),
+            listOf('-', '-', '-', 'E')
+        )
+
+        val result = lettersInPlace(grid, 2)
+        assertThat(result).isEqualTo(listOf(Pair(1, 'O'), Pair(3, 'N')))
+    }
+
+    @Test
+    fun `should return a usable alternative word`() {
+        val words = listOf("ONE", "TWO", "BEAN", "BEANS", "DONE", "DOWN")
+        val wordsAndRowIndices = listOf(Pair(2, "DONE"))
+        val lettersInPlace = listOf(Pair(1, 'O'), Pair(3, 'N'))
+        val index = 2
+
+        val result = usableWords(words, wordsAndRowIndices, lettersInPlace, index)
+
+        assertThat(result).containsExactly("DOWN")
     }
 }
 
