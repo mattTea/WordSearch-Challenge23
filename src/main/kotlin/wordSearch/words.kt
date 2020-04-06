@@ -454,6 +454,7 @@ val locations = listOf(
 val words = locations
     .filter { it.length <= 14 }
     .map { it.toUpperCase() }
+    .shuffled()
 
 fun main() {
     println(words)

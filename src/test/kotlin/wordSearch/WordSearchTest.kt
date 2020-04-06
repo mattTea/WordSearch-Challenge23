@@ -1,11 +1,9 @@
 package wordSearch
 
 import assertk.assertThat
-import assertk.assertions.contains
-import assertk.assertions.containsExactly
-import assertk.assertions.isEqualTo
-import assertk.assertions.isTrue
+import assertk.assertions.*
 import org.junit.jupiter.api.Test
+import kotlin.collections.containsAll
 
 class WordSearchTest {
     @Test
@@ -18,19 +16,6 @@ class WordSearchTest {
         assertThat(grid[0].size).isEqualTo(14)
         assertThat(grid.flatten().size).isEqualTo(196)
     }
-
-//    @Test
-//    fun `should create grid with 2 words included in either horizontal or vertical planes`() {
-//        val grid = createWordSearch(listOf("FIRSTWORD", "SECONDWORD"), 2)
-//
-//        grid.map { println(it) }
-//        val result = checkBothPlanes(grid, "FIRSTWORD", "SECONDWORD")
-//
-//        assertThat(grid.size).isEqualTo(14)
-//        assertThat(grid[0].size).isEqualTo(14)
-//        assertThat(grid.flatten().size).isEqualTo(196)
-//        assertThat(result).isTrue()
-//    }
 
     @Test
     fun `SECOND ATTEMPT should hide a horizontal word in grid`() {
@@ -76,21 +61,39 @@ class WordSearchTest {
         val lettersInPlace = listOf(Pair(1, 'O'), Pair(3, 'N'))
         val index = 2
 
-        val result = usableWords(words, wordsAndRowIndices, lettersInPlace, index)
+        val result = usableWords(words, lettersInPlace, 4)
 
         assertThat(result).containsExactly("DOWN")
     }
-}
 
-private fun checkBothPlanes(grid: List<List<Char>>, word1: String, word2: String): Boolean {
-    val horizontalCheck = grid.flatten().joinToString("")
-    val verticalCheck = grid.transpose().flatten().joinToString("")
+    @Test
+    fun `should return horizontal and vertical words already present in grid`() {
+        val grid = listOf(
+            listOf('-', '-', '-', '-', '-', '-'),
+            listOf('-', '-', 'Y', '-', '-', '-'),
+            listOf('P', 'L', 'E', 'A', 'S', 'E'),
+            listOf('-', '-', 'S', '-', '-', '-'),
+            listOf('-', '-', '-', '-', '-', '-'),
+            listOf('-', '-', '-', '-', '-', '-')
+        )
 
-    return when {
-        horizontalCheck.contains(word1) && horizontalCheck.contains(word2) -> true
-        verticalCheck.contains(word1) && verticalCheck.contains(word2) -> true
-        horizontalCheck.contains(word1) && verticalCheck.contains(word2) -> true
-        horizontalCheck.contains(word2) && verticalCheck.contains(word1) -> true
-        else -> false
+        val result = wordsInGrid(grid, listOf("YES", "THANKS", "PLEASE", "LOVELY"))
+
+        assertThat(result).containsOnly("YES", "PLEASE")
+    }
+
+    @Test
+    fun `should create grid with 5 words included in either horizontal or vertical planes`() {
+        val grid = createWordSearch(words, 5)
+
+        grid.map { println(it) }
+        val result = wordsInGrid(grid, words)
+        println(result)
+
+        assertThat(grid.size).isEqualTo(14)
+        assertThat(grid[0].size).isEqualTo(14)
+        assertThat(grid.flatten().size).isEqualTo(196)
+        assertThat(result.size).isGreaterThanOrEqualTo(5)
+        // greater than or equal to to cover double counting of e.g. JLBRENTCROSS and BRENTCROSS
     }
 }
